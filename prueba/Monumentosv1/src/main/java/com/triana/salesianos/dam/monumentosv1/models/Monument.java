@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class monument {
+public class Monument {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
     private String nombrePais, nombreCiudad, nombreMonumento, descripcion;
-
-    private String imagen;
+    private String imagen, urlFoto;
+    private double longitud, latitud;
 }

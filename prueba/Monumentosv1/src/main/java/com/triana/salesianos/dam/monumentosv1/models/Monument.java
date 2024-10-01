@@ -1,8 +1,6 @@
 package com.triana.salesianos.dam.monumentosv1.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +14,33 @@ import lombok.NoArgsConstructor;
 public class Monument {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String nombrePais, nombreCiudad, nombreMonumento, descripcion;
-    private String imagen, urlFoto;
-    private double longitud, latitud;
+    @Column(nullable = false, length = 2)
+    private String codigoPais;
+
+    @Column(nullable = false)
+    private String nombrePais;
+
+    @Column(nullable = false)
+    private String nombreCiudad;
+
+    @Column(nullable = false)
+    private String nombreMonumento;
+
+    @Column(nullable = false, length = 2000)
+    private String descripcion;
+
+    @Column(nullable = false)
+    private String imagen;
+
+    @Column(nullable = false)
+    private String urlFoto;
+
+    @Column(nullable = false)
+    private double longitud;
+
+    @Column(nullable = false)
+    private double latitud;
 }

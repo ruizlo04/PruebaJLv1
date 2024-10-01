@@ -4,6 +4,8 @@ import com.triana.salesianos.dam.monumentosv1.models.Monument;
 import com.triana.salesianos.dam.monumentosv1.repository.MonumentRepository;
 import com.triana.salesianos.dam.monumentosv1.service.MonumentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,52 +13,34 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/monumentos")
+@RequestMapping("/api/monuments")
 public class MonumentController {
 
     @Autowired
     private MonumentService monumentService;
 
+    @GetMapping
+    public ResponseEntity<List<Monument>> listarMonumentos() {
+        return new ResponseEntity<>(monumentService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<Monument> obtenerMonumento(@PathVariable long id) {
+        Monument monumento = monumentService.findById(id);
+        return monumento != null ? new ResponseEntity<>(monumento, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @GetMapping ("/crearMonumento")
-    public String showForm(Model model) {
-
-        Monument m = new Monument();
-        model.addAttribute("monumentList", m);
-
-        return "";
-
+    public ResponseEntity<Monument> crearMonumento(@RequestBody Monument monumento) {
+           monumento = monumentService.save(monumento);
+           return new ResponseEntity<>(monumento, HttpStatus.CREATED);
     }
 
-    @PostMapping("addMonument")
-    public String submit(@ModelAttribute("") Monument m) {
-        monumentService.save(m);
-        return "";
-    }
-
-    @GetMapping("/eliminarMonument")
-    public String eliminarMonument(@RequestParam long id) {
+    @DeleteMapping("/{id}}")
+    public ResponseEntity<Void> eliminarMonument(@PathVariable long id) {
         monumentService.deleteById(id);
-        return "";
-    }
-
-    @GetMapping("/editar/{id}")
-    public String showFormEdit(@PathVariable("id") long id, Model model) {
-        Optional<Monument> aEditarOptional = monumentService.findById(id);
-        if (aEditarOptional.isPresent()) {
-            Monument aEditar = aEditarOptional.get();
-            List<Monument> monumentList = monumentService.findAll();
-            model.addAttribute("monument", aEditar);
-            model.addAttribute("monumentList", monumentList);
-            return "";
-        } else {
-            return "";
-        }
-    }
-
-    @PostMapping("/editar/submit")
-    public String procesarFormularioEdit(@ModelAttribute("monument") Monument m) {
-        monumentService.edit(m);
-        return "";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

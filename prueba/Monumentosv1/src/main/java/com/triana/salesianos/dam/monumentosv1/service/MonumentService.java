@@ -3,6 +3,7 @@ package com.triana.salesianos.dam.monumentosv1.service;
 import com.triana.salesianos.dam.monumentosv1.models.Monument;
 import com.triana.salesianos.dam.monumentosv1.repository.MonumentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class MonumentService{
 
     //Atributos
+    @Autowired
     private final MonumentRepository repository;
 
 
@@ -24,9 +26,9 @@ public class MonumentService{
     }
 
 
-    public Optional<Monument> findById(Long id) {
+    public Monument findById(Long id) {
 
-        return repository.findById(id);
+        return repository.findById(id).orElse(null);
     }
 
     public Monument save(Monument monumento) {
